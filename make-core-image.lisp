@@ -2,7 +2,11 @@
 
 (mapc 'require '(sb-bsd-sockets sb-posix sb-introspect sb-cltl2 asdf uiop))
 
-(setf (uiop:getenv "CPATH") "/opt/homebrew/include:$CPATH")
+(when (member :darwin *features*)
+  (setf (uiop:getenv "CPATH") #P"/opt/homebrew/include:$CPATH"))
+
+(when (member :freebsd *features*)
+  (sb-alien:load-shared-object #P"/usr/local/lib/libgit2.so"))
 
 (load #P"~/quicklisp/setup.lisp")
 
@@ -13,9 +17,6 @@
 	:CFFI
 	:CL-CSV
 	:CL-GIT
-	:CL-GLFW3
-	:CL-GLFW3-EXAMPLES
-	:CL-OPENGL
 	:CL-YAML
 	:CLACK
 	:CLINGON
@@ -24,7 +25,6 @@
 	:DEXADOR
 	:FIVEAM
 	:FSET
-	:GLFW
 	:HUNCHENTOOT
 	:IRONCLAD
 	:KEBAB
@@ -44,6 +44,13 @@
 	:TRIVIAL-DOWNLOAD
 	:TUITION
 	:ZIP))
+
+(when (member :darwin *features*)
+  (mapc 'ql:quickload
+	'(:CL-GLFW3
+	  :CL-GLFW3-EXAMPLES
+	  :CL-OPENGL
+	  :GLFW)))
 
 (log4cl.log4slime:install :force t)
 
