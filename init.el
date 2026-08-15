@@ -61,6 +61,54 @@
   ;;(setq lsp-clojure-server-command '("/path/to/clojure-lsp"))
   ) ;; Optional: In case `clojure-lsp` is not in your $PATH
 
+(defvar parameters
+  '(window-parameters . ((no-other-window . t)
+                         (no-delete-other-windows . t))))
+
+(setq fit-window-to-buffer-horizontally t)
+(setq window-resize-pixelwise t)
+
+(setq
+ display-buffer-alist
+ `(("\\*Buffer List\\*"
+    display-buffer-in-side-window
+    (side . bottom)
+    (slot . 0)
+    (window-height . fit-window-to-buffer)
+    (preserve-size . (nil . t))
+    ,parameters)
+   ("\\*Tags List\\*"
+    display-buffer-in-side-window
+    (side . right)
+    (slot . 0)
+    (window-width . fit-window-to-buffer)
+    (preserve-size . (t . nil))
+    ,parameters)
+   ("\\*\\(?:help\\|grep\\|Completions\\)\\*"
+    display-buffer-in-side-window
+    (side . bottom)
+    (slot . -1)
+    (preserve-size . (nil . t))
+    ,parameters)
+   ("\\*\\(?:eshell\\|compilation\\)\\*"
+    display-buffer-in-side-window
+    (mode . eshell)
+    (side . bottom)
+    (slot . 1)
+    (preserve-size . (nil . t))
+    ,parameters)))
+
+(defun dired-default-directory-on-left ()
+  "Display `default-directory' in side window on left, hiding details."
+  (interactive)
+  (let ((buffer (dired-noselect default-directory)))
+    (with-current-buffer buffer (dired-hide-details-mode t))
+    (display-buffer-in-side-window
+     buffer `((side . left) (slot . 0)
+              (window-width . fit-window-to-buffer)
+              (preserve-size . (t . nil)) ,parameters))))
+
+
 ;;(customize-set-variable 'jdecomp-decompiler-paths
 ;;                        '((cfr . "~/Downloads/cfr-0.152.jar")
 ;;                          (fernflower . "~/idea-IC-162.1628.40/plugins/java-decompiler/lib/java-decompiler.jar")
