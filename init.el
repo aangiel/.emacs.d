@@ -17,7 +17,7 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(defvar my-packages '(slime rainbow-delimiters magit cider lsp-mode))
+(defvar my-packages '(slime rainbow-delimiters magit cider lsp-mode company))
 
 (dolist (package my-packages)
   (unless (package-installed-p package)

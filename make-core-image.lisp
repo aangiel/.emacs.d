@@ -2,11 +2,9 @@
 
 (mapc 'require '(sb-bsd-sockets sb-posix sb-introspect sb-cltl2 asdf uiop))
 
-(when (member :darwin *features*)
-  (setf (uiop:getenv "CPATH") #P"/opt/homebrew/include:$CPATH"))
+#+darwin(setf (uiop:getenv "CPATH") "/opt/homebrew/include:$CPATH")
 
-(when (member :freebsd *features*)
-  (sb-alien:load-shared-object #P"/usr/local/lib/libgit2.so"))
+#+freebsd(sb-alien:load-shared-object #P"/usr/local/lib/libgit2.so")
 
 (load #P"~/quicklisp/setup.lisp")
 
@@ -45,12 +43,12 @@
 	:TUITION
 	:ZIP))
 
-(when (member :darwin *features*)
-  (mapc 'ql:quickload
+#+darwin
+(mapc 'ql:quickload
 	'(:CL-GLFW3
 	  :CL-GLFW3-EXAMPLES
 	  :CL-OPENGL
-	  :GLFW)))
+	  :GLFW))
 
 (log4cl.log4slime:install :force t)
 
