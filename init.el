@@ -25,7 +25,9 @@
 
 (require 'slime)
 (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl slime-autodoc))
-(setq inferior-lisp-program "sbcl --noinform --core ~/.emacs.d/sbcl.core-for-slime --dynamic-space-size 2048")
+(setq inferior-lisp-program (concat "sbcl --noinform --core "
+				    (expand-file-name user-emacs-directory)
+				    "sbcl.core-for-slime --dynamic-space-size 2048"))
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'after-init-hook 'global-company-mode)
