@@ -1,5 +1,17 @@
 (defmacro comment (&rest args) nil)
 
+(when (eq 'darwin system-type)
+  (setq ns-alternate-modifier 'alt)
+  (setq ns-command-modifier 'meta)
+  (setq ns-control-modifier 'control)
+  (setq ns-option-modifier 'alt)
+  (setq ns-right-alternate-modifier 'alt)
+  (setq ns-right-command-modifier 'meta)
+  (setq ns-right-control-modifier 'control)
+  (setq ns-right-option-modifier 'none))
+
+(when (eq 'berkeley-unix system-type))
+
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (load-theme 'tsdh-dark)
 (set-face-attribute 'default nil :height 150)
@@ -33,35 +45,10 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 
-;; (add-to-list 'load-path "~/common-lisp/slime-star")
-;; (load-file "~/quicklisp/dists/quicklisp/software/slite-20250622-git/slite.el")
-
-(setq slime-contribs '(slime-fancy
-		       ;;slime-star
-		       ))
+(setq slime-contribs '(slime-fancy))
 
 (load "~/quicklisp/log4slime-setup.el")
 (global-log4slime-mode 1)
-
-(use-package lsp-mode
-  :ensure t
-  :hook ((clojure-mode . lsp)
-         (clojurec-mode . lsp)
-         (clojurescript-mode . lsp)
-	 (clojuresdart-mode . lsp))
-  :config
-  ;; add paths to your local installation of project mgmt tools, like lein
-  (setenv "PATH" (concat
-                   "/usr/local/bin" path-separator
-                   (getenv "PATH")))
-  (dolist (m '(clojure-mode
-               clojurec-mode
-               clojurescript-mode
-               clojurex-mode
-	       clojuredart-mode))
-     (add-to-list 'lsp-language-id-configuration `(,m . "clojure")))
-  ;;(setq lsp-clojure-server-command '("/path/to/clojure-lsp"))
-  ) ;; Optional: In case `clojure-lsp` is not in your $PATH
 
 (defvar parameters
   '(window-parameters . ((no-other-window . t)
@@ -111,97 +98,3 @@
               (preserve-size . (t . nil)) ,parameters))))
 
 
-;;(customize-set-variable 'jdecomp-decompiler-paths
-;;                        '((cfr . "~/Downloads/cfr-0.152.jar")
-;;                          (fernflower . "~/idea-IC-162.1628.40/plugins/java-decompiler/lib/java-decompiler.jar")
-;;                          (procyon . "~/procyon-decompiler-0.5.30.jar")))
-;;(jdecomp-mode 1)
-;;
-;;(require 'package)
-;;(setq package-archives
-;;	  '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-;;		("MELPA"        . "https://melpa.org/packages/")
-;;		("ORG"          . "https://orgmode.org/elpa/")
-;;		("MELPA Stable" . "https://stable.melpa.org/packages/")
-;;		("nongnu"       . "https://elpa.nongnu.org/nongnu/"))
-;;	  package-archive-priorities
-;;	  '(("GNU ELPA"     . 20)
-;;		("MELPA"        . 15)
-;;		("ORG"          . 10)
-;;		("MELPA Stable" . 5)
-;;		("nongnu"       . 0)))
-;;
-;;(package-initialize)
-;;
-;;(unless package-archive-contents
-;;  (package-refresh-contents))
-;;
-;;(unless (package-installed-p 'use-package)
-;;  (package-install 'use-package))
-;;
-;;(require 'use-package)
-;;
-;;(use-package magit slime rainbow-delimiters paredit)
-;;(custom-set-variables
-;; ;; custom-set-variables was added by Custom.
-;; ;; If you edit it by hand, you could mess it up, so be careful.
-;; ;; Your init file should contain only one such instance.
-;; ;; If there is more than one, they won't work right.
-;; '(package-selected-packages '(company dired-subtree jdecomp lsp-mode magit slime rainbow-delimiters paredit)))
-;;(custom-set-faces
-;; ;; custom-set-faces was added by Custom.
-;; ;; If you edit it by hand, you could mess it up, so be careful.
-;; ;; Your init file should contain only one such instance.
-;; ;; If there is more than one, they won't work right.
-;; )
-;;
-;;(setq inferior-lisp-program "/opt/homebrew/bin/sbcl")
-;;
-;;(define-key dired-mode-map "i" 'dired-subtree-insert)
-;;(define-key dired-mode-map ";" 'dired-subtree-remove)
-;;
-;;(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-;;(add-hook 'lisp-mode-hook #'paredit-mode)
-;;
-;;(custom-set-variables
-;; custom-set-variables was added by Custom.
-;; If you edit it by hand, you could mess it up, so be careful.
-;; Your init file should contain only one such instance.
-;; If there is more than one, they won't work right.
-;; '(package-selected-packages nil))
-;;(custom-set-faces
-;; custom-set-faces was added by Custom.
-;; If you edit it by hand, you could mess it up, so be careful.
-;; Your init file should contain only one such instance.
-;; If there is more than one, they won't work right.
-;;
-;;(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;; '(package-selected-packages
-;;   '(cider cl-libify company dired-subtree jdecomp lsp-mode magit paredit
-;;	   rainbow-delimiters slime)))
-;; (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- ;;)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ns-alternate-modifier 'super)
- '(ns-command-modifier 'meta)
- '(package-selected-packages
-   '(cider cl-libify company dired-subtree jdecomp lsp-mode magit paredit
-	   rainbow-delimiters slime)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
