@@ -47,8 +47,8 @@
 
 (setq slime-contribs '(slime-fancy))
 
-(load "~/quicklisp/log4slime-setup.el")
-(global-log4slime-mode 1)
+(with-eval-after-load "~/quicklisp/log4slime-setup.el"
+  (global-log4slime-mode 1))
 
 (defvar parameters
   '(window-parameters . ((no-other-window . t)
