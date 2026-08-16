@@ -1,0 +1,4 @@
+**/**
+!.gitignore
+!init.el
+!make-core-image.lisp
