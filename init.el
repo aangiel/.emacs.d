@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (defmacro comment (&rest args) nil)
 
 (when (eq 'darwin system-type)
@@ -13,7 +15,7 @@
 (when (eq 'berkeley-unix system-type))
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(load-theme 'tsdh-dark)
+(load-theme 'deeper-blue)
 (set-face-attribute 'default nil :height 150)
 (global-display-line-numbers-mode)
 (savehist-mode)
@@ -29,7 +31,7 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(defvar my-packages '(slime rainbow-delimiters magit cider lsp-mode company))
+(defvar my-packages '(slime rainbow-delimiters magit cider lsp-mode company helm))
 
 (dolist (package my-packages)
   (unless (package-installed-p package)
@@ -96,5 +98,26 @@
      buffer `((side . left) (slot . 0)
               (window-width . fit-window-to-buffer)
               (preserve-size . (t . nil)) ,parameters))))
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(cider cl-libify company dired-subtree helm jdecomp lsp-mode magit
+	   paredit rainbow-delimiters slime)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(require 'helm)
+(helm-mode 1)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-c C-f") 'helm-find-files)
 
 
