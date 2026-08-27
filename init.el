@@ -89,16 +89,15 @@
     (preserve-size . (nil . t))
     ,parameters)))
 
-(defun dired-default-directory-on-left ()
+(defun dired-default-directory-on-left (dir)
   "Display `default-directory' in side window on left, hiding details."
-  (interactive)
-  (let ((buffer (dired-noselect default-directory)))
+  (interactive "DDefault directory: ")
+  (let ((buffer (dired-noselect (or dir default-directory))))
     (with-current-buffer buffer (dired-hide-details-mode t))
     (display-buffer-in-side-window
      buffer `((side . left) (slot . 0)
               (window-width . fit-window-to-buffer)
               (preserve-size . (t . nil)) ,parameters))))
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
