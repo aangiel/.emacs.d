@@ -118,6 +118,7 @@
 (helm-mode 1)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-c C-f") 'helm-find-files)
+(global-set-key (kbd "s-;") 'previous-window-any-frame)
 
 (defun disable-mouse ()
   (interactive)
