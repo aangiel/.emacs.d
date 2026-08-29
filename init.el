@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
+(load "~/.emacs.d/sanemacs.el" nil t)
+
 (defmacro comment (&rest args) nil)
 
 (when (eq 'darwin system-type)
@@ -104,9 +106,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(cider cl-libify company dired-subtree helm jdecomp lsp-mode magit
-	   paredit rainbow-delimiters slime)))
+ '(package-selected-packages '(clojure-mode paredit rainbow-delimiters undo-tree)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -122,10 +122,11 @@
 
 (defun disable-mouse ()
   (interactive)
-  (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]  
+  (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
                [mouse-2] [down-mouse-2] [drag-mouse-2] [double-mouse-2] [triple-mouse-2]
                [mouse-3] [down-mouse-3] [drag-mouse-3] [double-mouse-3] [triple-mouse-3]
                [mouse-4] [down-mouse-4] [drag-mouse-4] [double-mouse-4] [triple-mouse-4]
                [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5]))
     (global-unset-key k)))
 
+(mouse-wheel-mode -1)
