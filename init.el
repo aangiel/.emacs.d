@@ -7,7 +7,7 @@
 (when (eq 'darwin system-type)
   (setq ns-alternate-modifier 'meta)
   (setq ns-command-modifier 'meta)
-  (setq ns-control-modifier 'control)
+  (setq ns-control-modifier 'super)
   (setq ns-option-modifier 'meta)
   (setq ns-right-alternate-modifier 'none)
   (setq ns-right-command-modifier 'super)
@@ -15,6 +15,8 @@
   (setq ns-right-option-modifier 'none))
 
 (when (eq 'berkeley-unix system-type))
+
+(setq source-directory (concat "~/.emacs.d/emacs-" emacs-version))
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (load-theme 'deeper-blue)
