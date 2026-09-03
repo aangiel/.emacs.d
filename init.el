@@ -21,7 +21,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (load-theme 'deeper-blue)
 (set-face-attribute 'default nil :height 150)
-(global-display-line-numbers-mode)
+;;(global-display-line-numbers-mode)
 (savehist-mode)
 
 (setopt display-fill-column-indicator-column 100)
@@ -132,3 +132,7 @@
     (global-unset-key k)))
 
 (mouse-wheel-mode -1)
+(disable-mouse)
+(setq-default cursor-type 'box)
+
+(setq dired-listing-switches "-lahDG --time-style=long-iso")
