@@ -2,7 +2,7 @@
 
 (load "~/.emacs.d/sanemacs.el" nil t)
 
-(defmacro comment (&rest args) nil)
+(defmacro comment (&rest _args) nil)
 
 (when (eq 'darwin system-type)
   (setq ns-alternate-modifier 'meta)
@@ -13,8 +13,6 @@
   (setq ns-right-command-modifier 'super)
   (setq ns-right-control-modifier 'control)
   (setq ns-right-option-modifier 'none))
-
-(when (eq 'berkeley-unix system-type))
 
 (setq source-directory (concat "~/.emacs.d/emacs-" emacs-version))
 
@@ -53,10 +51,10 @@
 
 (setq slime-contribs '(slime-fancy))
 
-(with-eval-after-load "~/quicklisp/log4slime-setup.el"
-  (global-log4slime-mode 1))
+;;(with-eval-after-load "~/quicklisp/log4slime-setup.el"
+;;  (when (fboundp global-log4slime-mode) (global-log4slime-mode 1)))
 
-(defvar parameters
+(defvar aa-parameters
   '(window-parameters . ((no-other-window . t)
                          (no-delete-other-windows . t))))
 
@@ -71,27 +69,27 @@
     (slot . 0)
     (window-height . fit-window-to-buffer)
     (preserve-size . (nil . t))
-    ,parameters)
+    ,aa-parameters)
    ("\\*Tags List\\*"
     display-buffer-in-side-window
     (side . right)
     (slot . 0)
     (window-width . fit-window-to-buffer)
     (preserve-size . (t . nil))
-    ,parameters)
+    ,aa-parameters)
    ("\\*\\(?:help\\|grep\\|Completions\\)\\*"
     display-buffer-in-side-window
     (side . bottom)
     (slot . -1)
     (preserve-size . (nil . t))
-    ,parameters)
+    ,aa-parameters)
    ("\\*\\(?:eshell\\|compilation\\)\\*"
     display-buffer-in-side-window
     (mode . eshell)
     (side . bottom)
     (slot . 1)
     (preserve-size . (nil . t))
-    ,parameters)))
+    ,aa-parameters)))
 
 (defun dired-default-directory-on-left (dir)
   "Display `default-directory' in side window on left, hiding details."
@@ -101,7 +99,7 @@
     (display-buffer-in-side-window
      buffer `((side . left) (slot . 0)
               (window-width . fit-window-to-buffer)
-              (preserve-size . (t . nil)) ,parameters))))
+              (preserve-size . (t . nil)) ,aa-parameters))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
