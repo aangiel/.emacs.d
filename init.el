@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t -*-
+;;; -*-  no-byte-compile: t; lexical-binding: t -*-
 
 (load "~/.emacs.d/sanemacs.el" nil t)
 
@@ -14,26 +14,34 @@
   (setq ns-right-control-modifier 'control)
   (setq ns-right-option-modifier 'none))
 
-(setq source-directory (concat "~/.emacs.d/emacs-" emacs-version))
+(setq source-directory (concat user-emacs-directory "src"))
 
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
 (load-theme 'deeper-blue)
 (set-face-attribute 'default nil :height 150)
 ;;(global-display-line-numbers-mode)
 (savehist-mode)
+
+(fido-mode 1)
 
 (setopt display-fill-column-indicator-column 100)
 (global-display-fill-column-indicator-mode)
 
 (setq user-mail-address "arturangiel@gmail.com")
 
-(setq global-auto-revert-mode 1)
+(setq completion-styles '(hotfuzz))
 
-(require 'package)
+(add-hook 'icomplete-minibuffer-setup-hook
+          (lambda () (kill-local-variable 'completion-styles)))
 
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;;(setq global-auto-revert-mode 1)
 
-(defvar my-packages '(slime rainbow-delimiters magit cider lsp-mode company helm))
+;;(require 'package)
+
+;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+(defvar my-packages
+  '(slime rainbow-delimiters magit cider lsp-mode company  dired-collapse))
 
 (dolist (package my-packages)
   (unless (package-installed-p package)
@@ -113,24 +121,36 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(global-set-key (kbd "C-;") 'previous-window-any-frame)
+(global-set-key (kbd "C-'") 'next-window-any-frame)
 
-(require 'helm)
-(helm-mode 1)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-c C-f") 'helm-find-files)
-(global-set-key (kbd "s-;") 'previous-window-any-frame)
 
-(defun disable-mouse ()
-  (interactive)
-  (dolist (k '([mouse-1] [down-mouse-1] [drag-mouse-1] [double-mouse-1] [triple-mouse-1]
-               [mouse-2] [down-mouse-2] [drag-mouse-2] [double-mouse-2] [triple-mouse-2]
-               [mouse-3] [down-mouse-3] [drag-mouse-3] [double-mouse-3] [triple-mouse-3]
-               [mouse-4] [down-mouse-4] [drag-mouse-4] [double-mouse-4] [triple-mouse-4]
-               [mouse-5] [down-mouse-5] [drag-mouse-5] [double-mouse-5] [triple-mouse-5]))
-    (global-unset-key k)))
-
-(mouse-wheel-mode -1)
-(disable-mouse)
 (setq-default cursor-type 'box)
 
-(setq dired-listing-switches "-lahDG --time-style=long-iso")
+(setq dired-listing-switches "-lahF -D%FT%R")
+
+(use-package dired-subtree
+  :ensure t
+  :after dired
+  :bind (:map dired-mode-map
+              ("i" . dired-subtree-toggle)))
+
+;;(global-dired-collapse-mode 1)
+
+;;(add-to-list 'helm-commands-using-frame 'helm-M-x)
+
+(use-package inhibit-mouse
+  :custom
+  ;; Disable highlighting of clickable text such as URLs and hyperlinks when
+  ;; hovered by the mouse pointer.
+  (inhibit-mouse-adjust-mouse-highlight t)
+
+  ;; Disables the use of tooltips (show-help-function) during mouse events.
+  (inhibit-mouse-adjust-show-help-function t)
+
+  :init
+  (if (daemonp)
+      (add-hook 'server-after-make-frame-hook #'inhibit-mouse-mode)
+    (inhibit-mouse-mode 1)))
+
+(fido-mode 1)
