@@ -52,9 +52,9 @@
 (setq linum-format "%4d ")                ; Line number format
 (delete-selection-mode 1)                 ; Selected text will be overwritten when you start typing
 (global-auto-revert-mode t)               ; Auto-update buffer if file has changed on disk
-(use-package undo-tree                    ; Enable undo-tree, sane undo/redo behavior
-  :init (global-undo-tree-mode)
-  :config (setq-default undo-tree-auto-save-history nil))
+;;(use-package undo-tree                    ; Enable undo-tree, sane undo/redo behavior
+;;  :init (global-undo-tree-mode)
+;;  :config (setq-default undo-tree-auto-save-history nil))
 (add-hook 'before-save-hook
 	  'delete-trailing-whitespace)    ; Delete trailing whitespace on save
 
