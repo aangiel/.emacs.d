@@ -78,7 +78,7 @@
    ("\\*\\(?:help\\|grep\\|Completions\\)\\*"
     display-buffer-in-side-window
     (side . bottom)
-    (slot . -1)
+    (slot . 2)
     (preserve-size . (nil . t))
     ,aangiel/window-parameters)
    ("\\*\\(?:eshell\\|compilation\\)\\*"
