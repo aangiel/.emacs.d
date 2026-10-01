@@ -30,6 +30,8 @@
 
 (setq completion-styles '(hotfuzz))
 
+(setq display-line-numbers 'relative)
+
 (add-hook 'icomplete-minibuffer-setup-hook
           (lambda () (kill-local-variable 'completion-styles)))
 
