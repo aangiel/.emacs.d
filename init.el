@@ -23,7 +23,7 @@
 (fido-mode 1)
 (fido-vertical-mode 1)
 
-(setopt display-fill-column-indicator-column 100)
+(setopt display-fill-column-indicator-column 79)
 (global-display-fill-column-indicator-mode)
 
 (setq user-mail-address "arturangiel@gmail.com")
@@ -35,9 +35,10 @@
 
 (require 'slime)
 (slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl slime-autodoc))
-(setq inferior-lisp-program (concat "sbcl --noinform --core "
-				    (expand-file-name user-emacs-directory)
-				    "sbcl.core-for-slime --dynamic-space-size 2048"))
+(setq inferior-lisp-program
+      (concat "sbcl --noinform --core "
+	      (expand-file-name user-emacs-directory)
+	      "sbcl.core-for-slime --dynamic-space-size 2048"))
 
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 
@@ -84,7 +85,7 @@
     (display-buffer-in-side-window (eshell i) `((side . bottom) (slot . ,i)))))
 
 (setq display-buffer-alist
-      `(((major-mode . dired)
+      `(((major-mode . dired-mode)
 	 display-buffer-in-side-window
 	 (slot . 0)
 	 (side . left))))
@@ -92,7 +93,7 @@
 (aangiel/eshell)
 (dired "~")
 (next-window-any-frame)
-;;(split-window-horizontally)
+(split-window-horizontally)
 (scratch-buffer)
 
 (modify-frame-parameters (car (frame-list))
@@ -107,6 +108,6 @@
   (interactive)
   (message (buffer-file-name))
   (save-buffer)
-  (shell-command "ls"))
-
-(aangiel/asciidoc-compile)
+  (shell-command
+   (concat "asciidoctor-pdf -r asciidoctor-diagram " (buffer-file-name))
+   nil))
