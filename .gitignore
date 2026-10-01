@@ -1,5 +1,6 @@
 **/**
 !.gitignore
 !init.el
+!early-init.el
 !make-core-image.lisp
 !sanemacs.el

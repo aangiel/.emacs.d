@@ -12,13 +12,6 @@
     (package-install package)))
 
 (when (eq 'darwin system-type)
-  (setq ns-alternate-modifier 'meta)
-  (setq ns-command-modifier 'meta)
-  (setq ns-control-modifier 'super)
-  (setq ns-option-modifier 'meta)
-  (setq ns-right-alternate-modifier 'none)
-  (setq ns-right-command-modifier 'super)
-  (setq ns-right-control-modifier 'control)
   (setq ns-right-option-modifier 'none))
 
 (setq source-directory (concat user-emacs-directory "src"))
@@ -28,6 +21,7 @@
 (savehist-mode)
 
 (fido-mode 1)
+(fido-vertical-mode 1)
 
 (setopt display-fill-column-indicator-column 100)
 (global-display-fill-column-indicator-mode)
@@ -52,59 +46,20 @@
 ;;(with-eval-after-load "~/quicklisp/log4slime-setup.el"
 ;;  (when (fboundp global-log4slime-mode) (global-log4slime-mode 1)))
 
-(defvar aangiel/window-parameters
-  '(window-parameters . ((no-other-window . t)
-                         (no-delete-other-windows . t))))
 
-(setq fit-window-to-buffer-horizontally t)
-(setq window-resize-pixelwise t)
-
-(setq
- display-buffer-alist
- `(("\\*Buffer List\\*"
-    display-buffer-in-side-window
-    (side . bottom)
-    (slot . 0)
-    (window-height . fit-window-to-buffer)
-    (preserve-size . (nil . t))
-    ,aangiel/window-parameters)
-   ("\\*Tags List\\*"
-    display-buffer-in-side-window
-    (side . right)
-    (slot . 0)
-    (window-width . fit-window-to-buffer)
-    (preserve-size . (t . nil))
-    ,aangiel/window-parameters)
-   ("\\*\\(?:help\\|grep\\|Completions\\)\\*"
-    display-buffer-in-side-window
-    (side . bottom)
-    (slot . 2)
-    (preserve-size . (nil . t))
-    ,aangiel/window-parameters)
-   ("\\*\\(?:eshell\\|compilation\\)\\*"
-    display-buffer-in-side-window
-    (mode . eshell)
-    (side . bottom)
-    (slot . 1)
-    (preserve-size . (nil . t))
-    ,aangiel/window-parameters)))
-
-(defun dired-default-directory-on-left (dir)
-  "Display `default-directory' in side window on left, hiding details."
-  (interactive "DDefault directory: ")
-  (let ((buffer (dired-noselect (or dir default-directory))))
-    (with-current-buffer buffer (dired-hide-details-mode t))
-    (display-buffer-in-side-window
-     buffer `((side . left) (slot . 0)
-              (window-width . fit-window-to-buffer)
-              (preserve-size . (t . nil)) ,aangiel/window-parameters))))
-
-(global-set-key (kbd "C-;") 'previous-window-any-frame)
 (global-set-key (kbd "C-'") 'next-window-any-frame)
 
 (setq-default cursor-type 'box)
 
-(setq dired-listing-switches "-lahF -D%FT%R")
+(add-hook 'dired-mode-hook #'dired-hide-details-mode)
+
+(let ((gls (executable-find "gls")))
+  (setq insert-directory-program (or gls insert-directory-program))
+  (setq dired-listing-switches
+	(if (and (not gls)
+		 (eq system-type 'darwin))
+	  "-lahF -D%FT%R"
+	  "-lahG --time-style=long-iso --group-directories-first")))
 
 (use-package dired-subtree
   :ensure t
@@ -120,3 +75,38 @@
   (if (daemonp)
       (add-hook 'server-after-make-frame-hook #'inhibit-mouse-mode)
     (inhibit-mouse-mode 1)))
+
+(setq dired-kill-when-opening-new-dired-buffer t)
+
+(defun aangiel/eshell (&optional n)
+  (interactive "P")
+  (dotimes (i (or n 3))
+    (display-buffer-in-side-window (eshell i) `((side . bottom) (slot . ,i)))))
+
+(setq display-buffer-alist
+      `(((major-mode . dired)
+	 display-buffer-in-side-window
+	 (slot . 0)
+	 (side . left))))
+
+(aangiel/eshell)
+(dired "~")
+(next-window-any-frame)
+;;(split-window-horizontally)
+(scratch-buffer)
+
+(modify-frame-parameters (car (frame-list))
+			 '((top + -1440) (left + 0)))
+
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
+(setq next-line-add-newlines t)
+
+
+(defun aangiel/asciidoc-compile ()
+  (interactive)
+  (message (buffer-file-name))
+  (save-buffer)
+  (shell-command "ls"))
+
+(aangiel/asciidoc-compile)
