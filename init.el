@@ -4,6 +4,10 @@
 
 (load "~/.emacs.d/sanemacs.el" nil t)
 
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode -1)
+(global-display-line-numbers-mode 1)
+
 (defvar my-packages
   '(slime dired-collapse hotfuzz))
 
@@ -36,7 +40,12 @@
           (lambda () (kill-local-variable 'completion-styles)))
 
 (require 'slime)
-(slime-setup '(slime-fancy slime-quicklisp slime-asdf slime-mrepl slime-autodoc))
+(slime-setup '(slime-fancy
+	       slime-quicklisp
+	       slime-asdf
+	       slime-mrepl
+	       slime-autodoc))
+
 (setq inferior-lisp-program
       (concat "sbcl --noinform --core "
 	      (expand-file-name user-emacs-directory)
