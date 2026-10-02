@@ -112,9 +112,6 @@
 
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
-(setq next-line-add-newlines t)
-
-
 (defun aangiel/asciidoc-compile ()
   (interactive)
   (message (buffer-file-name))
