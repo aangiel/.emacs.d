@@ -21,7 +21,7 @@
 (setq source-directory (concat user-emacs-directory "src"))
 
 (load-theme 'deeper-blue)
-(set-face-attribute 'default nil :height 150)
+(set-face-attribute 'default nil :height 150 :family "Fira Code")
 (savehist-mode)
 
 (fido-mode 1)
