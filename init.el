@@ -4,6 +4,9 @@
 
 (load "~/.emacs.d/sanemacs.el" nil t)
 
+(use-package load-env-vars)
+(load-env-vars "~/.env")
+
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode -1)
 (global-display-line-numbers-mode 1)
@@ -68,13 +71,17 @@
 
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
-(let ((gls (executable-find "gls")))
-  (setq insert-directory-program (or gls insert-directory-program))
-  (setq dired-listing-switches
-	(if (and (not gls)
-		 (eq system-type 'darwin))
-	  "-lahF -D%FT%R"
-	  "-lahG --time-style=long-iso --group-directories-first")))
+(setq dired-listing-switches "-lahF -D%FT%R")
+(setq insert-directory-program "ls")
+
+(comment
+ (let ((gls (executable-find "gls")))
+   (setq insert-directory-program (or gls insert-directory-program))
+   (setq dired-listing-switches
+	 (if (and (not gls)
+		  (eq system-type 'darwin))
+	     "-lahF -D%FT%R"
+	   "-lahG --time-style=long-iso --group-directories-first"))))
 
 (use-package dired-subtree
   :ensure t
@@ -122,3 +129,51 @@
   (shell-command
    (concat "asciidoctor-pdf -r asciidoctor-diagram " (buffer-file-name))
    nil))
+
+(use-package gptel)
+(setq gptel-api-key (getenv "OPENAI_API_KEY"))
+(gptel-make-openai "llama-cpp"	;Any name
+	   :stream t			;Stream responses
+	   :protocol "http"
+	   :host "localhost:8080"	;Llama.cpp server location
+	   :models '(test))
+
+(gptel-make-openai "lm-studio"	;Any name
+	   :stream t			;Stream responses
+	   :protocol "http"
+	   :host "localhost:1234"	;Llama.cpp server location
+	   :models '(lm-studio))
+
+(add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+(gptel-make-gemini "Gemini" :key (getenv "GEMINI_API_KEY") :stream t)
+
+(gptel-make-openai "OpenRouter"               ;Any name you want
+  :host "openrouter.ai"
+  :endpoint "/api/v1/chat/completions"
+  :stream t
+  :key (getenv "OPENROUTER_API_KEY")                   ;can be a function that returns the key
+  :models '(openrouter/free
+	    openrouter/pareto-code
+	    deepseek/deepseek-v4.1-flash))
+
+(gptel-make-xai "xAI"                   ; Any name you want
+  :stream t
+  :key (getenv "GROK_API_KEY"))
+
+(gptel-make-anthropic "Claude"          ;Any name you want
+  :stream t                             ;Streaming responses
+  :key (getenv "ANTHROPIC_API_KEY"))
+
+(setq sh-shell-file "/bin/dash")
+
+(use-package copilot
+  :ensure t
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . copilot-accept-completion)
+              ("TAB" . copilot-accept-completion)
+              ("C-<tab>" . copilot-accept-completion-by-word)
+              ("C-TAB" . copilot-accept-completion-by-word)
+              ("C-n" . copilot-next-completion)
+              ("C-p" . copilot-previous-completion)))
