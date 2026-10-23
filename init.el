@@ -169,6 +169,7 @@
 
 (use-package copilot
   :ensure t
+  :init (setq copilot-indent-offset-warning-disable t)
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("<tab>" . copilot-accept-completion)
@@ -177,3 +178,18 @@
               ("C-TAB" . copilot-accept-completion-by-word)
               ("C-n" . copilot-next-completion)
               ("C-p" . copilot-previous-completion)))
+
+(add-hook 'eww-after-render-hook #'eww-readable)
+
+(defun aangiel/freebsd-man (topic)
+  "Search FreeBSD man pages for TOPIC and display the result in eww.
+TOPIC may be \"name\" or \"name section\"."
+  (interactive "sFreeBSD man page [section]: ")
+  (let ((base-url
+	 "https://man.freebsd.org/cgi/man.cgi?query=%s&sektion=%s&format=html")
+	(name (string-trim topic))
+        (section "0"))
+    (when (string-match "\\([\\._A-Za-z]+\\)\s+\\([0-9]\\)"  name)
+      (setq section (match-string 2 name)
+	    name    (match-string 1 name)))
+    (eww (format base-url (url-hexify-string name) section))))
