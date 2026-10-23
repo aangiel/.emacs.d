@@ -193,3 +193,5 @@ TOPIC may be \"name\" or \"name section\"."
       (setq section (match-string 2 name)
 	    name    (match-string 1 name)))
     (eww (format base-url (url-hexify-string name) section))))
+
+(use-package vterm)
