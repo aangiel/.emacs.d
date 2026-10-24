@@ -72,7 +72,7 @@
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
 (setq dired-listing-switches "-lahF -D%FT%R")
-(setq insert-directory-program "ls")
+(setq dired-use-ls-dired nil)
 
 (comment
  (let ((gls (executable-find "gls")))
