@@ -95,7 +95,10 @@
 
 (add-hook 'dired-mode-hook #'dired-hide-details-mode)
 
-(setq dired-listing-switches "-lahF -D%FT%R")
+(aangiel/osp
+ "Darwin"
+ (setq dired-listing-switches "-lahF -D%FT%R"))
+
 (setq dired-use-ls-dired nil)
 
 (comment
