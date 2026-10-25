@@ -2,6 +2,12 @@
 
 (defmacro comment (&rest _args) nil)
 
+(defmacro aangiel/osp (system &rest body)
+  "Run BODY if the current operating system matches SYSTEM
+   (as returned by 'uname -s')."
+  `(when (string-equal ,system (car (process-lines "uname" "-s")))
+     ,@body))
+
 (load "~/.emacs.d/sanemacs.el" nil t)
 
 (use-package load-env-vars)
@@ -18,13 +24,22 @@
   (unless (package-installed-p package)
     (package-install package)))
 
-(when (eq 'darwin system-type)
-  (setq ns-right-option-modifier 'none))
+(aangiel/osp
+ "Darwin"
+ (setq ns-right-option-modifier 'none)
+ (set-face-attribute 'default nil :height 150 :family "Fira Code")
+ (modify-frame-parameters (car (frame-list))
+			 '((top + -1440) (left + 0)))
+ (add-to-list 'default-frame-alist '(fullscreen . fullboth)))
+
+(aangiel/osp
+ "OpenBSD"
+ (set-face-attribute 'default nil :height 80))
 
 (setq source-directory (concat user-emacs-directory "src"))
 
 (load-theme 'deeper-blue)
-(set-face-attribute 'default nil :height 150 :family "Fira Code")
+
 (savehist-mode)
 
 (fido-mode 1)
@@ -126,11 +141,6 @@
 (split-window-horizontally)
 (scratch-buffer)
 
-(modify-frame-parameters (car (frame-list))
-			 '((top + -1440) (left + 0)))
-
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
-
 (defun aangiel/asciidoc-compile ()
   (interactive)
   (message (buffer-file-name))
@@ -203,4 +213,5 @@ TOPIC may be \"name\" or \"name section\"."
 	    name    (match-string 1 name)))
     (eww (format base-url (url-hexify-string name) section))))
 
-(use-package vterm)
+(use-package vterm
+  :ensure t)
