@@ -29,9 +29,18 @@
 
 (fido-mode 1)
 (fido-vertical-mode 1)
-(add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'prog-mode-hook 'company-mode)
+(add-hook 'eshell-mode-hook 'company-mode)
 
-(global-set-key (kbd "<tab>") #'company-indent-or-complete-common)
+(with-eval-after-load 'company
+  (define-key company-active-map
+              (kbd "TAB")
+              #'company-complete-common-or-cycle)
+  (define-key company-active-map
+              (kbd "<backtab>")
+              (lambda ()
+                (interactive)
+                (company-complete-common-or-cycle -1))))
 
 (setopt display-fill-column-indicator-column 79)
 (global-display-fill-column-indicator-mode)
