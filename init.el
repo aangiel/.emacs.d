@@ -218,3 +218,5 @@ TOPIC may be \"name\" or \"name section\"."
 
 (use-package vterm
   :ensure t)
+
+(setq eshell-save-history-on-exit t)
