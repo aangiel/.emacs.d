@@ -21,7 +21,8 @@
 (load "~/.emacs.d/sanemacs.el" nil t)
 
 (use-package load-env-vars)
-(load-env-vars "~/.env")
+(when (file-exists-p "~/.env")
+  (load-env-vars "~/.env"))
 
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode -1)
@@ -227,7 +228,7 @@
 (use-package copilot
   :ensure t
   :init (setq copilot-indent-offset-warning-disable t)
-  :hook (prog-mode . copilot-mode)
+  ;; :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
               ("<tab>" . copilot-accept-completion)
               ("TAB" . copilot-accept-completion)
@@ -257,4 +258,8 @@ TOPIC may be \"name\" or \"name section\"."
 (setq eshell-save-history-on-exit t)
 
 (provide 'init)
+
+(add-hook 'prog-mode-hook #'flycheck-mode)
+(add-hook 'flycheck-mode-hook #'flycheck-list-errors)
+
 ;;; init.el ends here
