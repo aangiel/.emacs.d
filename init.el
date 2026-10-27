@@ -1,10 +1,20 @@
-;;; -*-  no-byte-compile: t; lexical-binding: t -*-
+;;; init.el --- Main Emacs config -*-  no-byte-compile: t; lexical-binding: t -*-
 
-(defmacro comment (&rest _args) nil)
+;;
+
+;;; Commentary:
+
+;;
+
+;;; Code:
+
+(defmacro comment (&rest _args)
+  "Borrowed from Clojure, this macro is used to comment out code."
+  nil)
 
 (defmacro aangiel/osp (system &rest body)
-  "Run BODY if the current operating system matches SYSTEM
-   (as returned by 'uname -s')."
+  "Run BODY if the current operating system matches SYSTEM.
+\(as returned by 'uname -s')."
   `(when (string-equal ,system (car (process-lines "uname" "-s")))
      ,@body))
 
@@ -128,6 +138,7 @@
 (setq dired-kill-when-opening-new-dired-buffer t)
 
 (defun aangiel/eshell (&optional n)
+  "Open N eshell buffers in side windows at the bottom of the frame."
   (interactive "P")
   (dotimes (i (or n 3))
     (display-buffer-in-side-window (eshell i) `((side . bottom) (slot . ,i)))))
@@ -136,15 +147,39 @@
       `(((major-mode . dired-mode)
 	 display-buffer-in-side-window
 	 (slot . 0)
-	 (side . left))))
+	 (side . left)
+	 (window-width . 0.15))
+	("\\*Warnings\\*"
+	 display-buffer-in-side-window
+	 (slot . 1)
+	 (side . top)
+	 (window-height . 0.1))
+	("\\*Messages\\*"
+	 display-buffer-in-side-window
+	 (slot . 0)
+	 (side . top)
+	 (window-height . 0.1))
+	("\\*eshell.*\\*"
+	 display-buffer-in-side-window
+	 (slot . 1)
+	 (side . bottom)
+	 (window-height . 0.3))
+	("\\*Flycheck errors\\*"
+	 display-buffer-in-side-window
+	 (slot . -1)
+	 (side . bottom)
+	 (window-height . 0.3))
+	((major-mode . prog-mode)
+	 display-buffer-reuse-mode-window)))
 
-(aangiel/eshell)
+;; (aangiel/eshell)
 (dired "~")
 (next-window-any-frame)
 (split-window-horizontally)
 (scratch-buffer)
 
 (defun aangiel/asciidoc-compile ()
+  "Compile the current AsciiDoc file to PDF using asciidoctor-pdf and asciidoctor-diagram."
   (interactive)
   (message (buffer-file-name))
   (save-buffer)
@@ -220,3 +255,6 @@ TOPIC may be \"name\" or \"name section\"."
   :ensure t)
 
 (setq eshell-save-history-on-exit t)
+
+(provide 'init)
+;;; init.el ends here
