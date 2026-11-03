@@ -1,11 +1,5 @@
 ;;; init.el --- Main Emacs config -*-  no-byte-compile: t; lexical-binding: t -*-
-
-;;
-
 ;;; Commentary:
-
-;;
-
 ;;; Code:
 
 (defmacro comment (&rest _args)
@@ -261,5 +255,41 @@ TOPIC may be \"name\" or \"name section\"."
 
 (add-hook 'prog-mode-hook #'flycheck-mode)
 (add-hook 'flycheck-mode-hook #'flycheck-list-errors)
+
+(use-package json-mode)
+
+(use-package swagg
+  :config
+  (setq
+   swagg-definitions
+   '((:name "GitHub"
+	    :json "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
+	    :base "https://api.github.com"
+	    :header-all ((token . (getenv "GITHUB_API_KEY"))
+			 (Cache-Control . "no-cache")
+			 (Content-Type . "application/json")
+			 (Accept . "application/json")))
+     (:name "GitLab"
+	    :yaml "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi.yaml"
+	    :base "https://gitlab.com/api"
+	    :header ((token . (getenv "GITLAB_API_KEY"))
+		     (Cache-Control . "no-cache")
+		     (Content-Type . "application/json")
+		     (Accept . "application/json")))
+     (:name "XenForo"
+	    :json "https://docs.xenforo.com/api/openapi.json"
+	    :base ""
+	    :header ((Cache-Control . "no-cache")
+		     (Content-Type . "application/json")
+		     (Accept . "application/json"))))))
+
+(org-babel-do-load-languages
+      'org-babel-load-languages
+      '((js . t)
+	(verb . t)))
+
+(use-package verb
+  :config
+  (setq verb-base-headers `(("User-Agent" . ,(concat "emacs " emacs-version)))))
 
 ;;; init.el ends here
