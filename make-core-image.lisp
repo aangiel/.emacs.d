@@ -48,9 +48,9 @@
 	'(:CL-GLFW3
 	  :CL-GLFW3-EXAMPLES
 	  :CL-OPENGL
-	  :GLFW))
+	  :GLFW
+	  :SDL3/TESTS))
 
 (log4cl.log4slime:install :force t)
 
 (save-lisp-and-die #P"~/.emacs.d/sbcl.core-for-slime")
-

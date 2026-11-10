@@ -12,6 +12,11 @@
   `(when (string-equal ,system (car (process-lines "uname" "-s")))
      ,@body))
 
+(defun kill-all-buffers ()
+  "Kills all buffers without asking."
+  (interactive)
+  (kill-matching-buffers-no-ask ".*"))
+
 (load "~/.emacs.d/sanemacs.el" nil t)
 
 (use-package load-env-vars)
@@ -81,10 +86,14 @@
 	       slime-mrepl
 	       slime-autodoc))
 
-(setq inferior-lisp-program
-      (concat "sbcl --noinform --core "
-	      (expand-file-name user-emacs-directory)
-	      "sbcl.core-for-slime --dynamic-space-size 2048"))
+(setq slime-lisp-implementations
+      `((sbcl ("sbcl"
+	       "--noinform"
+	       "--core" ,(concat (expand-file-name user-emacs-directory)
+				 "sbcl.core-for-slime")
+	       "--dynamic-space-size" "2048"))
+	(ecl ("ecl"))))
+
 
 (add-hook 'prog-mode-hook 'electric-pair-mode)
 
@@ -286,10 +295,17 @@ TOPIC may be \"name\" or \"name section\"."
 (org-babel-do-load-languages
       'org-babel-load-languages
       '((js . t)
-	(verb . t)))
+	(verb . t)
+	(lilypond . t)))
+
+(setq org-babel-lilypond-commands
+      (list (car (process-lines "command" "-v" "lilypond")) "open" "open"))
+
 
 (use-package verb
   :config
   (setq verb-base-headers `(("User-Agent" . ,(concat "emacs " emacs-version)))))
+
+(server-start)
 
 ;;; init.el ends here
