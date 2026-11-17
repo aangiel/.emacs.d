@@ -99,9 +99,11 @@
 
 (setq slime-contribs '(slime-fancy))
 
-;;(with-eval-after-load "~/quicklisp/log4slime-setup.el"
-;;  (when (fboundp global-log4slime-mode) (global-log4slime-mode 1)))
+(with-eval-after-load "~/quicklisp/log4slime-setup.el"
+  (when (fboundp global-log4slime-mode) (global-log4slime-mode 1)))
 
+(load "~/quicklisp/log4slime-setup.el")
+(global-log4slime-mode 1)
 
 (global-set-key (kbd "C-'") 'next-window-any-frame)
 
@@ -111,7 +113,7 @@
 
 (aangiel/osp
  "Darwin"
- (setq dired-listing-switches "-lahF -D%FT%R"))
+ (setq dired-listing-switches "-lhFA -D%FT%R"))
 
 (setq dired-use-ls-dired nil)
 
